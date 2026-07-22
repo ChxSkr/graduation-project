@@ -1,0 +1,24 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/home/HomePage",
+    "pages/home/MoreServicesPage",
+    "pages/schedule/SchedulePage",
+    "pages/schedule/CourseDetailPage",
+    "pages/schedule/AddCoursePage",
+    "pages/lostfound/LostFoundPage",
+    "pages/lostfound/LostFoundDetailPage",
+    "pages/lostfound/PublishPage",
+    "pages/lostfound/MyPublishPage",
+    "pages/news/NewsPage",
+    "pages/news/NewsDetailPage",
+    "pages/activity/ActivityPage",
+    "pages/card/CardPage",
+    "pages/card/RechargePage",
+    "pages/card/RecordPage",
+    "pages/profile/ProfilePage",
+    "pages/profile/EditProfilePage",
+    "pages/profile/SettingsPage",
+    "pages/profile/AccountBindPage"
+  ]
+}

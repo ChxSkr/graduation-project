@@ -1,0 +1,13 @@
+{
+  "modelVersion": "6.1.1",
+  "name": "CampusLife",
+  "version": "1.0.0",
+  "description": "校园智慧生活APP",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {},
+  "devDependencies": {
+    "@ohos/hypium": "1.0.6"
+  }
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90D9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E5B9E;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="108" height="108" rx="24" ry="24" fill="url(#bgGrad)"/>
+  <!-- 书本/校园建筑屋顶形状 -->
+  <path d="M54 24 L22 44 L22 78 L86 78 L86 44 Z" fill="#FFFFFF" opacity="0.95"/>
+  <!-- 屋顶 -->
+  <path d="M18 46 L54 22 L90 46" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 门 -->
+  <rect x="47" y="60" width="14" height="18" rx="2" fill="#4A90D9"/>
+  <!-- 窗户 -->
+  <rect x="30" y="52" width="10" height="10" rx="1" fill="#4A90D9"/>
+  <rect x="68" y="52" width="10" height="10" rx="1" fill="#4A90D9"/>
+  <!-- 智慧圆点 -->
+  <circle cx="54" cy="36" r="4" fill="#FFD700"/>
+</svg>

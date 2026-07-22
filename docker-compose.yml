@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Redis 缓存
+  redis:
+    image: redis:7.2-alpine
+    container_name: campus-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass campus123456
+    volumes:
+      - ./docker-data/redis-data:/data
+    networks:
+      - campus-network
+
+  # MinIO 对象存储
+  minio:
+    image: minio/minio:latest
+    container_name: campus-minio
+    restart: always
+    ports:
+      - "9000:9000"   # API 端口
+      - "9001:9001"   # 控制台端口
+    environment:
+      MINIO_ROOT_USER: campusadmin
+      MINIO_ROOT_PASSWORD: campus123456
+    command: server /data --console-address ":9001"
+    volumes:
+      - ./docker-data/minio-data:/data
+    networks:
+      - campus-network
+
+  # RocketMQ 消息队列（可选，二期启用）
+  # rocketmq:
+  #   image: apacherocketmq/rocketmq:latest
+  #   container_name: campus-rocketmq
+  #   restart: always
+  #   ports:
+  #     - "9876:9876"
+  #     - "10911:10911"
+  #   environment:
+  #     - "MAX_POSSIBLE_HEAP=256m"
+  #   volumes:
+  #     - ./docker-data/rocketmq-data:/home/rocketmq/store
+  #   networks:
+  #     - campus-network
+
+  # Elasticsearch 全文检索（可选，二期启用）
+  # elasticsearch:
+  #   image: elasticsearch:8.14.0
+  #   container_name: campus-elasticsearch
+  #   restart: always
+  #   ports:
+  #     - "9200:9200"
+  #   environment:
+  #     - discovery.type=single-node
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - xpack.security.enabled=false
+  #   volumes:
+  #     - ./docker-data/es-data:/usr/share/elasticsearch/data
+  #   networks:
+  #     - campus-network
+
+networks:
+  campus-network:
+    driver: bridge

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>校园智慧生活 · 首页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/cn-fontsource-smiley-sans-oblique/font.css" rel="stylesheet">
+<style>
+  :root{
+    --harmony-blue:#0A59F7;
+    --harmony-blue-deep:#0033C2;
+    --teal:#00C2CB;
+    --teal-soft:#7FE3E8;
+    --ink:#13203B;
+    --ink-soft:#5A6788;
+    --ink-mute:#9AA4BD;
+    --bg:#EEF1F6;
+    --card:#FFFFFF;
+    --line:#E9ECF3;
+    --coral:#FF6B6B;
+    --leaf:#27C49A;
+    --amber:#FFB454;
+    --violet:#8B6CE6;
+    --sky:#3FB6FF;
+    --rose:#FF8FB1;
+    --r-lg:26px;
+    --r-md:18px;
+    --r-sm:14px;
+    --shadow-card:0 10px 30px -12px rgba(20,40,90,.14), 0 2px 8px -2px rgba(20,40,90,.06);
+    --shadow-pop:0 22px 50px -18px rgba(10,89,247,.42);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:"Sora","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+    background:#0B1430;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* ===== Stage background ===== */
+  .stage{
+    position:fixed;inset:0;
+    background:
+      radial-gradient(900px 600px at 78% 18%, rgba(0,194,203,.28), transparent 60%),
+      radial-gradient(800px 700px at 12% 82%, rgba(10,89,247,.34), transparent 62%),
+      radial-gradient(600px 500px at 50% 50%, rgba(139,108,230,.10), transparent 70%),
+      linear-gradient(160deg,#0A1130 0%,#0E1A44 55%,#091233 100%);
+    overflow:hidden;
+  }
+  .stage::before{ /* grain */
+    content:"";position:absolute;inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity:.06;mix-blend-mode:overlay;pointer-events:none;
+  }
+  .orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;}
+  .orb.a{width:320px;height:320px;background:#00C2CB;top:-60px;right:-40px;}
+  .orb.b{width:360px;height:360px;background:#0A59F7;bottom:-80px;left:-60px;}
+  .orb.c{width:220px;height:220px;background:#8B6CE6;top:40%;left:55%;opacity:.32;}
+
+  .stage-label{
+    position:fixed;left:42px;top:42px;color:#cdd6f4;z-index:5;
+    font-family:"Sora";font-weight:300;letter-spacing:.22em;font-size:11px;text-transform:uppercase;
+    opacity:.55;
+  }
+  .stage-title{
+    position:fixed;left:42px;bottom:42px;color:#fff;z-index:5;max-width:380px;
+    font-family:"Smiley Sans","Sora",sans-serif;
+  }
+  .stage-title h1{font-size:30px;line-height:1.15;letter-spacing:.02em;font-weight:400;}
+  .stage-title h1 span{background:linear-gradient(90deg,#7FE3E8,#3FB6FF);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .stage-title p{margin-top:10px;font-family:"Sora";font-weight:300;font-size:12.5px;letter-spacing:.14em;opacity:.5;text-transform:uppercase;}
+
+  /* ===== Phone frame ===== */
+  .phone{
+    position:relative;z-index:3;
+    width:390px;height:820px;
+    background:#000;
+    border-radius:54px;
+    padding:13px;
+    box-shadow:
+      0 0 0 2px #2a2f45,
+      0 0 0 10px #0b0f1f,
+      0 40px 90px -20px rgba(0,0,0,.7),
+      0 0 120px -10px rgba(0,194,203,.25);
+  }
+  .screen{
+    position:relative;width:100%;height:100%;
+    border-radius:42px;overflow:hidden;
+    background:var(--bg);
+    display:flex;flex-direction:column;
+  }
+
+  /* ===== Status bar ===== */
+  .statusbar{
+    position:relative;z-index:20;
+    height:46px;flex-shrink:0;
+    padding:0 26px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:"Sora";font-weight:600;font-size:14.5px;color:var(--ink);
+    background:linear-gradient(180deg,#F4F7FC 0%,#EEF1F6 100%);
+  }
+  .statusbar .right{display:flex;align-items:center;gap:7px;}
+  .signal{display:flex;align-items:flex-end;gap:2px;height:11px;}
+  .signal i{width:3px;background:var(--ink);border-radius:1px;}
+  .signal i:nth-child(1){height:4px}
+  .signal i:nth-child(2){height:6px}
+  .signal i:nth-child(3){height:8px}
+  .signal i:nth-child(4){height:11px;opacity:.32}
+  .battery{width:24px;height:12px;border:1.5px solid var(--ink);border-radius:4px;position:relative;padding:1.5px;}
+  .battery::after{content:"";position:absolute;right:-3px;top:3.5px;width:2px;height:5px;background:var(--ink);border-radius:0 2px 2px 0;}
+  .battery i{display:block;width:70%;height:100%;background:var(--ink);border-radius:1.5px;}
+
+  /* punch hole */
+  .punchhole{
+    position:absolute;left:50%;top:11px;transform:translateX(-50%);
+    width:96px;height:26px;background:#000;border-radius:14px;z-index:30;
+  }
+
+  /* ===== App scroll area ===== */
+  .app{
+    flex:1;overflow-y:auto;overflow-x:hidden;
+    -ms-overflow-style:none;scrollbar-width:none;
+  }
+  .app::-webkit-scrollbar{display:none;}
+
+  /* ===== Header ===== */
+  header{
+    position:relative;
+    padding:6px 22px 18px;
+    background:linear-gradient(180deg,#F4F7FC 0%,rgba(238,241,246,0) 100%);
+  }
+  .greet-row{display:flex;align-items:flex-start;justify-content:space-between;margin-top:4px;}
+  .greet-text .hi{
+    font-family:"Smiley Sans","Sora",sans-serif;
+    font-size:26px;line-height:1.1;color:var(--ink);letter-spacing:.01em;
+  }
+  .greet-text .hi em{font-style:normal;color:var(--harmony-blue);}
+  .greet-text .date{
+    margin-top:6px;font-family:"Sora";font-weight:400;font-size:12px;
+    color:var(--ink-soft);letter-spacing:.04em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .greet-text .date b{font-weight:600;color:var(--ink);}
+  .weather{
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.85);
+    border:1px solid var(--line);
+    padding:7px 12px 7px 9px;border-radius:30px;
+    backdrop-filter:blur(8px);
+    box-shadow:0 6px 16px -8px rgba(20,40,90,.12);
+  }
+  .weather .sun{
+    width:22px;height:22px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#FFE08A,#FFB454);
+    box-shadow:0 0 0 4px rgba(255,180,84,.18);
+    position:relative;animation:spin 14s linear infinite;
+  }
+  .weather .sun::before,.weather .sun::after{
+    content:"";position:absolute;inset:-6px;border-radius:50%;
+    border:1.5px dashed rgba(255,180,84,.45);
+  }
+  .weather .sun::after{inset:-11px;border-style:dotted;opacity:.5;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .weather .t{font-family:"Sora";font-weight:600;font-size:13px;color:var(--ink);}
+  .weather .t span{font-weight:400;color:var(--ink-soft);font-size:11px;display:block;line-height:1.1;}
+
+  .avatar{
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,#0A59F7,#00C2CB);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:"Sora";font-weight:700;font-size:16px;
+    box-shadow:0 6px 16px -4px rgba(10,89,247,.5);
+    border:2px solid #fff;
+  }
+
+  /* search */
+  .search{
+    margin-top:16px;display:flex;align-items:center;gap:10px;
+    background:#fff;border:1px solid var(--line);
+    border-radius:30px;padding:11px 16px;
+    box-shadow:0 6px 16px -10px rgba(20,40,90,.18);
+  }
+  .search svg{flex-shrink:0;}
+  .search input{
+    border:none;outline:none;flex:1;background:transparent;
+    font-family:"Sora";font-size:13.5px;color:var(--ink);
+  }
+  .search input::placeholder{color:var(--ink-mute);}
+  .search .scan{
+    width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,#0A59F7,#0033C2);
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    box-shadow:0 4px 10px -2px rgba(10,89,247,.5);
+  }
+
+  /* ===== Hero campus card ===== */
+  .hero-wrap{padding:18px 18px 4px;}
+  .hero-card{
+    position:relative;overflow:hidden;
+    border-radius:var(--r-lg);
+    padding:20px 22px 22px;
+    color:#fff;
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(0,194,203,.85), transparent 55%),
+      radial-gradient(120% 100% at 0% 100%, rgba(63,182,255,.55), transparent 60%),
+      linear-gradient(135deg,#0A59F7 0%,#0033C2 100%);
+    box-shadow:var(--shadow-pop);
+    animation:floatCard 6s ease-in-out infinite;
+  }
+  @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .hero-card::before{ /* skyline */
+    content:"";position:absolute;left:0;right:0;bottom:0;height:120px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 120' preserveAspectRatio='none'><g fill='%23ffffff' opacity='0.14'><path d='M0 120V70h18v20h14V55h22v45h12V40h26v80h14V62h20v35h16V48h24v72h14V58h18v40h16V66h22V40h26v80h12V55h20v40h16V70h18v50z'/></g></svg>");
+    background-size:cover;background-position:bottom;opacity:.7;
+  }
+  .hero-card::after{ /* sheen */
+    content:"";position:absolute;top:-60%;left:-20%;width:60%;height:220%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);
+    transform:rotate(18deg);animation:sheen 7s ease-in-out infinite;
+  }
+  @keyframes sheen{0%,100%{left:-30%}50%{left:120%}}
+
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2;}
+  .hero-top .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:"Sora";font-weight:500;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;opacity:.85;
+    background:rgba(255,255,255,.16);padding:5px 10px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .hero-top .tag .dot{width:6px;height:6px;border-radius:50%;background:#7EFF8B;box-shadow:0 0 8px #7EFF8B;}
+  .qr-btn{
+    width:38px;height:38px;border-radius:12px;
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(4px);cursor:pointer;transition:transform .25s;
+  }
+  .qr-btn:hover{transform:scale(1.08) rotate(3deg);}
+
+  .hero-id{margin-top:18px;position:relative;z-index:2;}
+  .hero-id .school{
+    font-family:"Sora";font-weight:400;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;opacity:.8;
+  }
+  .hero-id .name{
+    font-family:"Smiley Sans","Sora",sans-serif;font-size:24px;line-height:1.1;
+    margin-top:6px;letter-spacing:.02em;
+  }
+  .hero-id .name span{opacity:.7;font-size:14px;font-family:"Sora";font-weight:400;margin-left:8px;letter-spacing:.05em;}
+
+  .hero-bal{
+    margin-top:16px;display:flex;align-items:flex-end;gap:10px;position:relative;z-index:2;
+  }
+  .hero-bal .num{
+    font-family:"Sora";font-weight:700;font-size:34px;line-height:1;letter-spacing:-.01em;
+  }
+  .hero-bal .num small{font-size:14px;font-weight:500;opacity:.8;margin-right:3px;}
+  .hero-bal .yuan{font-family:"Sora";font-size:12px;opacity:.7;margin-bottom:4px;letter-spacing:.1em;}
+  .hero-bal .delta{
+    margin-left:auto;font-family:"Sora";font-size:11px;
+    background:rgba(255,255,255,.16);padding:5px 10px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.22);
+  }
+
+  .hero-foot{
+    margin-top:18px;display:flex;gap:10px;position:relative;z-index:2;
+  }
+  .hero-foot .act{
+    flex:1;background:rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:14px;padding:10px 12px;
+    display:flex;align-items:center;gap:8px;
+    font-family:"Sora";font-size:12px;font-weight:500;
+    cursor:pointer;transition:background .25s,transform .25s;
+  }
+  .hero-foot .act:hover{background:rgba(255,255,255,.24);transform:translateY(-2px);}
+  .hero-foot .act .ic{
+    width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.2);
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ===== Section title ===== */
+  .sec{padding:22px 18px 4px;}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .sec-head h3{
+    font-family:"Smiley Sans","Sora",sans-serif;font-size:18px;letter-spacing:.02em;color:var(--ink);
+    display:flex;align-items:center;gap:8px;
+  }
+  .sec-head h3 .bar{width:4px;height:16px;border-radius:3px;background:linear-gradient(180deg,#0A59F7,#00C2CB);}
+  .sec-head a{
+    font-family:"Sora";font-size:11.5px;color:var(--ink-mute);text-decoration:none;
+    display:flex;align-items:center;gap:3px;cursor:pointer;
+  }
+
+  /* ===== Quick grid ===== */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+  .qcell{
+    display:flex;flex-direction:column;align-items:center;gap:9px;
+    padding:14px 4px;border-radius:var(--r-md);cursor:pointer;
+    transition:transform .25s,background .25s;
+  }
+  .qcell:hover{transform:translateY(-3px);background:rgba(255,255,255,.7);}
+  .qcell .ic{
+    width:54px;height:54px;border-radius:17px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    box-shadow:0 8px 18px -10px var(--ic-shadow,rgba(10,89,247,.5));
+  }
+  .qcell .ic::after{
+    content:"";position:absolute;inset:0;border-radius:15px;
+    background:linear-gradient(160deg,rgba(255,255,255,.45),transparent 50%);
+    pointer-events:none;
+  }
+  .qcell .lbl{font-family:"Sora";font-weight:500;font-size:11.5px;color:var(--ink);}
+  .qcell .badge{
+    position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;
+    background:var(--coral);color:#fff;border-radius:9px;
+    font-family:"Sora";font-weight:700;font-size:9px;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid var(--bg);
+  }
+
+  /* ===== Today schedule ===== */
+  .schedule-card{
+    background:var(--card);border-radius:var(--r-lg);
+    padding:18px;box-shadow:var(--shadow-card);
+    border:1px solid var(--line);
+  }
+  .timeline{position:relative;padding-left:8px;}
+  .timeline::before{content:"";position:absolute;left:13px;top:8px;bottom:8px;width:2px;background:var(--line);}
+  .class{display:flex;gap:16px;padding:10px 0;position:relative;}
+  .class + .class{border-top:1px dashed var(--line);}
+  .class .time{
+    width:54px;flex-shrink:0;text-align:center;position:relative;z-index:2;
+  }
+  .class .time .dot{
+    width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid var(--ink-mute);
+    margin:0 auto 6px;position:relative;
+  }
+  .class.now .time .dot{
+    border-color:var(--harmony-blue);background:var(--harmony-blue);
+    box-shadow:0 0 0 4px rgba(10,89,247,.16);
+  }
+  .class.now .time .dot::after{
+    content:"";position:absolute;inset:-6px;border-radius:50%;
+    border:2px solid var(--harmony-blue);animation:pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+  .class .time .hm{font-family:"Sora";font-weight:600;font-size:12px;color:var(--ink);}
+  .class .time .len{font-family:"Sora";font-size:9.5px;color:var(--ink-mute);margin-top:2px;}
+  .class .info{flex:1;padding-left:4px;}
+  .class .info .subj{
+    font-family:"Sora";font-weight:600;font-size:14.5px;color:var(--ink);
+    display:flex;align-items:center;gap:8px;
+  }
+  .class.now .info .subj{color:var(--harmony-blue);}
+  .class .info .subj .now-tag{
+    font-family:"Sora";font-weight:600;font-size:9px;letter-spacing:.08em;
+    background:var(--harmony-blue);color:#fff;padding:2px 7px;border-radius:8px;text-transform:uppercase;
+  }
+  .class .info .meta{
+    margin-top:5px;font-family:"Sora";font-size:11.5px;color:var(--ink-soft);
+    display:flex;gap:12px;flex-wrap:wrap;
+  }
+  .class .info .meta span{display:flex;align-items:center;gap:4px;}
+
+  .sched-foot{
+    margin-top:6px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .progress-mini{flex:1;margin-right:14px;}
+  .progress-mini .pbar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;}
+  .progress-mini .pbar i{display:block;height:100%;width:42%;border-radius:4px;background:linear-gradient(90deg,#0A59F7,#00C2CB);}
+  .progress-mini .ptxt{font-family:"Sora";font-size:10.5px;color:var(--ink-mute);margin-top:5px;}
+  .sched-foot .next-btn{
+    font-family:"Sora";font-size:11.5px;font-weight:600;color:#fff;
+    background:linear-gradient(135deg,#0A59F7,#0033C2);
+    padding:8px 14px;border-radius:20px;cursor:pointer;
+    box-shadow:0 6px 14px -4px rgba(10,89,247,.5);
+  }
+
+  /* ===== Feed ===== */
+  .feed-card{
+    background:var(--card);border-radius:var(--r-lg);
+    padding:16px;box-shadow:var(--shadow-card);border:1px solid var(--line);
+    display:flex;gap:13px;align-items:center;cursor:pointer;margin-bottom:12px;
+    transition:transform .25s,box-shadow .25s;
+  }
+  .feed-card:hover{transform:translateY(-2px);box-shadow:0 16px 36px -14px rgba(20,40,90,.22);}
+  .feed-card .thumb{
+    width:60px;height:60px;border-radius:16px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    position:relative;overflow:hidden;
+  }
+  .feed-card .thumb::after{
+    content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 60%);
+  }
+  .feed-card .body{flex:1;min-width:0;}
+  .feed-card .body .ftag{
+    display:inline-block;font-family:"Sora";font-weight:600;font-size:9px;letter-spacing:.08em;
+    text-transform:uppercase;padding:2px 7px;border-radius:6px;margin-bottom:5px;
+  }
+  .feed-card .body h4{
+    font-family:"Sora";font-weight:600;font-size:14px;color:var(--ink);line-height:1.35;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .feed-card .body p{
+    font-family:"Sora";font-size:11.5px;color:var(--ink-soft);margin-top:4px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .feed-card .arrow{color:var(--ink-mute);}
+
+  /* ===== Tab bar ===== */
+  .tabbar{
+    position:relative;z-index:20;flex-shrink:0;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(20px);
+    border-top:1px solid var(--line);
+    padding:8px 18px 22px;
+    display:flex;align-items:center;justify-content:space-around;
+  }
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1;color:var(--ink-mute);transition:color .25s;}
+  .tab.active{color:var(--harmony-blue);}
+  .tab .tlbl{font-family:"Sora";font-weight:500;font-size:10px;letter-spacing:.04em;}
+  .tab-center{
+    width:50px;height:50px;border-radius:18px;flex-shrink:0;
+    background:linear-gradient(135deg,#0A59F7,#00C2CB);
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    box-shadow:0 8px 18px -4px rgba(10,89,247,.55);
+    cursor:pointer;transition:transform .3s;
+    margin-top:-22px;
+    border:4px solid #fff;
+  }
+  .tab-center:hover{transform:translateY(-3px) rotate(90deg);}
+
+  /* ===== Entrance animation ===== */
+  .reveal{opacity:0;transform:translateY(16px);animation:reveal .7s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes reveal{to{opacity:1;transform:none;}}
+  .d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.21s}
+  .d4{animation-delay:.29s}.d5{animation-delay:.37s}.d6{animation-delay:.45s}
+  .d7{animation-delay:.53s}.d8{animation-delay:.61s}
+
+  /* home indicator */
+  .home-ind{
+    position:absolute;left:50%;bottom:7px;transform:translateX(-50%);
+    width:128px;height:5px;border-radius:3px;background:var(--ink);opacity:.32;z-index:25;
+  }
+
+  @media (max-width:480px){
+    .stage-label,.stage-title{display:none;}
+    .phone{box-shadow:none;border-radius:0;padding:0;height:100vh;width:100vw;}
+    .screen{border-radius:0;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+</div>
+<div class="stage-label">HarmonyOS · Campus Life</div>
+<div class="stage-title">
+  <h1>校园智慧生活<br><span>Smart Campus · Home</span></h1>
+  <p>fresh morning · harmony design</p>
+</div>
+
+<div class="phone">
+  <div class="screen">
+    <div class="punchhole"></div>
+
+    <!-- Status bar -->
+    <div class="statusbar reveal d1">
+      <span>9:24</span>
+      <div class="right">
+        <div class="signal"><i></i><i></i><i></i><i></i></div>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M7.5 2.2C9.6 2.2 11.5 3 13 4.4l1-1.1C12.3 1.7 10 0.8 7.5 0.8S2.7 1.7 1 3.3l1 1.1C3.5 3 5.4 2.2 7.5 2.2z" fill="#13203B"/><path d="M7.5 5.4c1.3 0 2.5.5 3.4 1.3l1-1.1c-1.2-1.1-2.8-1.7-4.4-1.7s-3.2.6-4.4 1.7l1 1.1C5 5.9 6.2 5.4 7.5 5.4z" fill="#13203B"/><path d="M7.5 8.6c.6 0 1.1.2 1.6.6l-1.6 1.8L5.9 9.2c.5-.4 1-.6 1.6-.6z" fill="#13203B"/></svg>
+        <div class="battery"><i></i></div>
+      </div>
+    </div>
+
+    <div class="app">
+      <!-- Header -->
+      <header>
+        <div class="greet-row">
+          <div class="greet-text reveal d1">
+            <div class="hi">早上好，<em>林同学</em></div>
+            <div class="date"><b>周三</b> · 11月20日 · 第12周</div>
+          </div>
+          <div class="avatar reveal d2">林</div>
+        </div>
+
+        <div class="hero-wrap reveal d3">
+          <div class="hero-card">
+            <div class="hero-top">
+              <div class="tag"><span class="dot"></span>校园卡 · 已激活</div>
+              <div class="qr-btn" title="出示付款码">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#fff" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="#fff" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="#fff" stroke-width="1.8"/><path d="M14 14h3v3M21 14v.01M14 21h.01M17 21h4v-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="hero-id">
+              <div class="school">East China Institute · 学生证</div>
+              <div class="name">林知遥 <span>CS · 2022 级</span></div>
+            </div>
+            <div class="hero-bal">
+              <div class="num"><small>¥</small>248.<span style="opacity:.7">50</span></div>
+              <div class="yuan">CNY</div>
+              <div class="delta">本月消费 ¥186</div>
+            </div>
+            <div class="hero-foot">
+              <div class="act">
+                <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                充值
+              </div>
+              <div class="act">
+                <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+                账单
+              </div>
+              <div class="act">
+                <div class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 11-9-9m9 9l-3-3m3 3l-3 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                挂失
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Quick services -->
+      <section class="sec reveal d4">
+        <div class="sec-head">
+          <h3><span class="bar"></span>常用服务</h3>
+        </div>
+        <div class="grid">
+          <div class="qcell" style="--ic-shadow:rgba(39,196,154,.45)">
+            <div class="ic" style="background:linear-gradient(135deg,#3FDDB0,#13B589)">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 5a1 1 0 011-1h6v16H5a1 1 0 01-1-1V5z" stroke="#fff" stroke-width="1.8"/><path d="M14 4h5a1 1 0 011 1v13a1 1 0 01-1 1h-5V4z" stroke="#fff" stroke-width="1.8"/></svg>
+            </div>
+            <div class="lbl">图书馆</div>
+          </div>
+          <div class="qcell" style="--ic-shadow:rgba(255,180,84,.45)">
+            <div class="ic" style="background:linear-gradient(135deg,#FFC97A,#FF9D2E)">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M4 9h16M9 3v4M15 3v4M9 13l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="lbl">课表</div>
+          </div>
+          <div class="qcell" style="--ic-shadow:rgba(10,89,247,.45)">
+            <div class="ic" style="background:linear-gradient(135deg,#5B9BFF,#0A59F7)">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M9 7h6M9 11h6M9 15h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <span class="badge" style="background:var(--leaf)">新</span>
+            </div>
+            <div class="lbl">成绩</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today schedule -->
+      <section class="sec reveal d5">
+        <div class="sec-head">
+          <h3><span class="bar"></span>今日课表</h3>
+          <a>本周 ›</a>
+        </div>
+        <div class="schedule-card">
+          <div class="timeline">
+            <div class="class now">
+              <div class="time">
+                <div class="dot"></div>
+                <div class="hm">10:00</div>
+                <div class="len">90min</div>
+              </div>
+              <div class="info">
+                <div class="subj">数据结构 <span class="now-tag">进行中</span></div>
+                <div class="meta">
+                  <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="#5A6788" stroke-width="2"/><circle cx="12" cy="9" r="2" stroke="#5A6788" stroke-width="2"/></svg>明理楼 B302</span>
+                  <span>王教授</span>
+                  <span>第 3-4 节</span>
+                </div>
+              </div>
+            </div>
+            <div class="class">
+              <div class="time">
+                <div class="dot"></div>
+                <div class="hm">14:00</div>
+                <div class="len">90min</div>
+              </div>
+              <div class="info">
+                <div class="subj">操作系统</div>
+                <div class="meta">
+                  <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="#5A6788" stroke-width="2"/><circle cx="12" cy="9" r="2" stroke="#5A6788" stroke-width="2"/></svg>行知楼 A105</span>
+                  <span>李教授</span>
+                  <span>第 5-6 节</span>
+                </div>
+              </div>
+            </div>
+            <div class="class">
+              <div class="time">
+                <div class="dot"></div>
+                <div class="hm">19:00</div>
+                <div class="len">60min</div>
+              </div>
+              <div class="info">
+                <div class="subj">英语角</div>
+                <div class="meta">
+                  <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" stroke="#5A6788" stroke-width="2"/><circle cx="12" cy="9" r="2" stroke="#5A6788" stroke-width="2"/></svg>外语楼 201</span>
+                  <span>社团活动</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sched-foot">
+            <div class="progress-mini">
+              <div class="pbar"><i></i></div>
+              <div class="ptxt">今日进度 42% · 还有 2 节课</div>
+            </div>
+            <div class="next-btn">下一节</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Campus feed -->
+      <section class="sec reveal d6" style="padding-bottom:24px;">
+        <div class="sec-head">
+          <h3><span class="bar"></span>校园动态</h3>
+          <a>更多 ›</a>
+        </div>
+
+        <div class="feed-card">
+          <div class="thumb" style="background:linear-gradient(135deg,#FF8A8A,#FF5A5A)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 13h2l2 6h10l2-6h2M5 13l1-7h12l1 7M9 17h6" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          </div>
+          <div class="body">
+            <span class="ftag" style="background:rgba(255,107,107,.14);color:#E64B4B">食堂</span>
+            <h4>二食堂上新 · 冬日限定砂锅系列</h4>
+            <p>11月18日起 · 凭校园卡立减 3 元</p>
+          </div>
+          <div class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9AA4BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+
+        <div class="feed-card">
+          <div class="thumb" style="background:linear-gradient(135deg,#3FDDB0,#13B589)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 5a1 1 0 011-1h6v16H5a1 1 0 01-1-1V5z" stroke="#fff" stroke-width="1.8"/><path d="M14 4h5a1 1 0 011 1v13a1 1 0 01-1 1h-5V4z" stroke="#fff" stroke-width="1.8"/></svg>
+          </div>
+          <div class="body">
+            <span class="ftag" style="background:rgba(39,196,154,.14);color:#13B589">通知</span>
+            <h4>图书馆期末延长开放至 23:00</h4>
+            <p>12月1日起执行 · 三楼自习室预约开放</p>
+          </div>
+          <div class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9AA4BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+
+        <div class="feed-card">
+          <div class="thumb" style="background:linear-gradient(135deg,#A98CF0,#7B5AE0)">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 5 5.5.8-4 4 1 5.7L12 15l-5 2.5 1-5.7-4-4 5.5-.8L12 2z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="body">
+            <span class="ftag" style="background:rgba(139,108,230,.14);color:#7B5AE0">活动</span>
+            <h4>第十六届"新芽"创新创业大赛报名</h4>
+            <p>截止 12月10日 · 组队报名享导师辅导</p>
+          </div>
+          <div class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9AA4BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Tab bar -->
+    <nav class="tabbar reveal d7">
+      <div class="tab active">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9z" fill="currentColor"/></svg>
+        <span class="tlbl">首页</span>
+      </div>
+      <div class="tab">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span class="tlbl">服务</span>
+      </div>
+      <div class="tab-center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="tab">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 012-2h12a2 2 0 012 2v9a2 2 0 01-2 2H9l-4 3v-3H6a2 2 0 01-2-2V6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1" fill="currentColor"/><circle cx="13" cy="10.5" r="1" fill="currentColor"/><circle cx="17" cy="10.5" r="1" fill="currentColor"/></svg>
+        <span class="tlbl">消息</span>
+      </div>
+      <div class="tab">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span class="tlbl">我的</span>
+      </div>
+    </nav>
+
+    <div class="home-ind"></div>
+  </div>
+</div>
+
+<script>
+  // greeting by time
+  (function(){
+    const h = new Date().getHours();
+    let hi = '早上好';
+    if (h>=12 && h<14) hi='中午好';
+    else if (h>=14 && h<18) hi='下午好';
+    else if (h>=18 || h<5) hi='晚上好';
+    const el = document.querySelector('.greet-text .hi');
+    if(el) el.innerHTML = hi+'，<em>林同学</em>';
+    const sbTime = document.querySelector('.statusbar > span');
+    if(sbTime){
+      const now=new Date();
+      sbTime.textContent = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+    }
+  })();
+
+  // tab interaction
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
